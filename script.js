@@ -133,6 +133,33 @@ const credentialProfiles = {
   branik: { password: "ember", characterIndex: 2, title: "Smith" }
 };
 
+const manualLibrary = {
+  aris: {
+    title: "Mistwood Operations Manual",
+    description: "Guidance and rulings for Aris' scouting missions.",
+    file: "manual-default.pdf",
+    downloadName: "mistwood-manual.pdf"
+  },
+  sable: {
+    title: "Shadow Binder's Reference",
+    description: "Notes, rituals, and table rules for Sable's campaigns.",
+    file: "manual-default.pdf",
+    downloadName: "shadow-binder-manual.pdf"
+  },
+  branik: {
+    title: "Emberhold Field Guide",
+    description: "Equipment care and tactics for Branik's deployments.",
+    file: "manual-default.pdf",
+    downloadName: "emberhold-guide.pdf"
+  },
+  default: {
+    title: "Campaign Manual",
+    description: "Reference guide for your active campaign.",
+    file: "manual-default.pdf",
+    downloadName: "campaign-manual.pdf"
+  }
+};
+
 const STORAGE_KEY = "activeProfileKey";
 
 const vitalsContainer = document.getElementById("vitals");
@@ -153,6 +180,13 @@ const statusPill = document.getElementById("status-pill");
 const navSubtitle = document.getElementById("nav-subtitle");
 const signOutButton = document.getElementById("sign-out");
 const randomizeButton = document.getElementById("randomize");
+const manualHeader = document.getElementById("manual-header");
+const manualTitle = document.getElementById("manual-title");
+const manualDescription = document.getElementById("manual-description");
+const manualHelper = document.getElementById("manual-helper");
+const manualViewer = document.getElementById("manual-viewer");
+const manualDownload = document.getElementById("manual-download");
+const manualViewerSection = document.getElementById("manual-viewer-section");
 
 const loginForm = document.getElementById("login-form");
 const loginError = document.getElementById("login-error");
@@ -296,6 +330,46 @@ function redirectToLogin() {
   window.location.replace("index.html");
 }
 
+function resolveManual(profile) {
+  if (!profile) return manualLibrary.default;
+  return manualLibrary[profile.key] || manualLibrary.default;
+}
+
+function handleManualPage() {
+  if (!manualViewerSection) return;
+
+  const storedProfile = loadStoredProfile();
+  if (!storedProfile) {
+    redirectToLogin();
+    return;
+  }
+
+  activeProfile = storedProfile;
+  const character = characters[storedProfile.characterIndex];
+  const manual = resolveManual(storedProfile);
+
+  if (manualTitle) manualTitle.textContent = manual.title;
+  if (manualDescription) manualDescription.textContent = manual.description;
+  if (manualHelper && character)
+    manualHelper.textContent = `Showing manual for ${character.name} (${storedProfile.title})`;
+  if (manualViewer) manualViewer.src = manual.file;
+  if (manualDownload) {
+    manualDownload.href = manual.file;
+    manualDownload.download = manual.downloadName || "campaign-manual.pdf";
+  }
+
+  if (navSubtitle && character) navSubtitle.textContent = `Manual for ${character.name}`;
+  if (statusPill) statusPill.textContent = "Ready";
+  if (manualHeader) manualHeader.classList.remove("hidden");
+  if (signOutButton) signOutButton.disabled = false;
+
+  signOutButton?.addEventListener("click", () => {
+    clearStoredProfile();
+    resetSheetState();
+    redirectToLogin();
+  });
+}
+
 function handleSheetPage() {
   if (!sheetSection) return;
 
@@ -324,3 +398,4 @@ function handleSheetPage() {
 
 handleLoginPage();
 handleSheetPage();
+handleManualPage();

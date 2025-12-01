@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaign Manual Viewer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <span class="nav-brand">Campaign Console</span>
+      <span class="nav-subtitle" id="nav-subtitle">Loading manual…</span>
+    </div>
+    <div class="nav-menu" aria-label="Page navigation">
+      <a href="main.html">Sheet</a>
+      <a href="history.html" aria-disabled="true">History</a>
+      <a href="manual.html" aria-current="page">Game's Manual</a>
+      <a href="dice.html" aria-disabled="true">Dice</a>
+    </div>
+    <div class="nav-actions">
+      <button class="ghost" id="sign-out" disabled>Sign out</button>
+    </div>
+  </nav>
+
+  <header class="page-header" id="manual-header">
+    <div>
+      <p class="eyebrow">Campaign Companion</p>
+      <h1 id="manual-title">Campaign Manual</h1>
+      <p class="tagline" id="manual-description">Loading the right guide for your party…</p>
+    </div>
+    <div class="meta">
+      <span class="pill" id="status-pill">Locked</span>
+    </div>
+  </header>
+
+  <section class="manual-viewer" id="manual-viewer-section">
+    <div class="card">
+      <div class="manual-actions">
+        <p class="helper-text" id="manual-helper">Preparing manual…</p>
+        <a class="ghost" id="manual-download" href="#" download>Download PDF</a>
+      </div>
+      <div class="manual-frame-wrapper">
+        <iframe id="manual-viewer" title="Campaign manual PDF" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    <p>Use the manual to guide decisions and rules for your current campaign.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
