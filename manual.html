@@ -41,7 +41,23 @@
         <a class="ghost" id="manual-download" href="#" download>Download PDF</a>
       </div>
       <div class="manual-frame-wrapper">
-        <iframe id="manual-viewer" title="Campaign manual PDF" loading="lazy"></iframe>
+        <div class="manual-toolbar" aria-label="PDF controls">
+          <div class="toolbar-group">
+            <button class="ghost" id="manual-prev" type="button">Previous</button>
+            <button class="ghost" id="manual-next" type="button">Next</button>
+            <span class="helper-text">
+              Page <span id="manual-page-num">—</span> of <span id="manual-page-count">—</span>
+            </span>
+          </div>
+          <div class="toolbar-group">
+            <button class="ghost" id="manual-zoom-out" type="button">-</button>
+            <button class="ghost" id="manual-zoom-reset" type="button">100%</button>
+            <button class="ghost" id="manual-zoom-in" type="button">+</button>
+          </div>
+        </div>
+        <div class="manual-canvas-wrapper">
+          <canvas id="manual-canvas" aria-label="Campaign manual PDF"></canvas>
+        </div>
       </div>
     </div>
   </section>
@@ -50,6 +66,7 @@
     <p>Use the manual to guide decisions and rules for your current campaign.</p>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
