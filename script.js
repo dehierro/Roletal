@@ -127,6 +127,14 @@ const characters = [
   }
 ];
 
+const credentialProfiles = {
+  aris: { password: "mist", characterIndex: 0, title: "Scout" },
+  sable: { password: "veil", characterIndex: 1, title: "Binder" },
+  branik: { password: "ember", characterIndex: 2, title: "Smith" }
+};
+
+const STORAGE_KEY = "activeProfileKey";
+
 const vitalsContainer = document.getElementById("vitals");
 const attributesContainer = document.getElementById("attributes");
 const skillsContainer = document.getElementById("skills");
@@ -138,6 +146,18 @@ const classEl = document.getElementById("char-class");
 const levelEl = document.getElementById("char-level");
 const alignmentEl = document.getElementById("char-alignment");
 const originEl = document.getElementById("char-origin");
+
+const sheetSection = document.getElementById("sheet");
+const pageHeader = document.getElementById("page-header");
+const statusPill = document.getElementById("status-pill");
+const navSubtitle = document.getElementById("nav-subtitle");
+const signOutButton = document.getElementById("sign-out");
+const randomizeButton = document.getElementById("randomize");
+
+const loginForm = document.getElementById("login-form");
+const loginError = document.getElementById("login-error");
+
+let activeProfile = null;
 
 function renderVital(title, value) {
   const div = document.createElement("div");
@@ -168,48 +188,139 @@ function renderSpell(spell) {
 }
 
 function clearContainers() {
-  vitalsContainer.innerHTML = "";
-  attributesContainer.innerHTML = "";
-  skillsContainer.innerHTML = "";
-  gearContainer.innerHTML = "";
-  spellsContainer.innerHTML = "";
+  if (vitalsContainer) vitalsContainer.innerHTML = "";
+  if (attributesContainer) attributesContainer.innerHTML = "";
+  if (skillsContainer) skillsContainer.innerHTML = "";
+  if (gearContainer) gearContainer.innerHTML = "";
+  if (spellsContainer) spellsContainer.innerHTML = "";
 }
 
 function renderCharacter(character) {
+  if (!character || !sheetSection) return;
+
   clearContainers();
-  nameEl.textContent = character.name;
-  classEl.textContent = character.class;
-  levelEl.textContent = `Level ${character.level}`;
-  alignmentEl.textContent = character.alignment;
-  originEl.textContent = character.origin;
+  if (nameEl) nameEl.textContent = character.name;
+  if (classEl) classEl.textContent = character.class;
+  if (levelEl) levelEl.textContent = `Level ${character.level}`;
+  if (alignmentEl) alignmentEl.textContent = character.alignment;
+  if (originEl) originEl.textContent = character.origin;
 
   Object.entries(character.vitals).forEach(([key, value]) => {
-    vitalsContainer.appendChild(renderVital(key, value));
+    vitalsContainer?.appendChild(renderVital(key, value));
   });
 
   Object.entries(character.attributes).forEach(([key, value]) => {
-    attributesContainer.appendChild(renderAttribute(key, value));
+    attributesContainer?.appendChild(renderAttribute(key, value));
   });
 
   character.skills.forEach((skill) => {
     const li = document.createElement("li");
     li.textContent = skill;
-    skillsContainer.appendChild(li);
+    skillsContainer?.appendChild(li);
   });
 
   character.gear.forEach((item) => {
-    gearContainer.appendChild(renderGear(item));
+    gearContainer?.appendChild(renderGear(item));
   });
 
   character.spells.forEach((spell) => {
-    spellsContainer.appendChild(renderSpell(spell));
+    spellsContainer?.appendChild(renderSpell(spell));
   });
 }
 
-const randomizeButton = document.getElementById("randomize");
-randomizeButton.addEventListener("click", () => {
-  const pick = Math.floor(Math.random() * characters.length);
-  renderCharacter(characters[pick]);
-});
+function authenticate(username, password) {
+  const key = username.trim().toLowerCase();
+  const entry = credentialProfiles[key];
+  if (!entry) return null;
+  return entry.password === password.trim() ? { ...entry, key } : null;
+}
 
-renderCharacter(characters[0]);
+function setStoredProfile(key) {
+  localStorage.setItem(STORAGE_KEY, key);
+}
+
+function clearStoredProfile() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+function loadStoredProfile() {
+  const key = localStorage.getItem(STORAGE_KEY);
+  if (!key) return null;
+  const profile = credentialProfiles[key];
+  return profile ? { ...profile, key } : null;
+}
+
+function setAuthenticatedState(profile, character) {
+  activeProfile = profile;
+  if (pageHeader) pageHeader.classList.remove("hidden");
+  if (sheetSection) sheetSection.classList.remove("hidden");
+  if (randomizeButton) randomizeButton.disabled = false;
+  if (signOutButton) signOutButton.disabled = false;
+  if (statusPill) statusPill.textContent = "Ready";
+  if (navSubtitle && character) navSubtitle.textContent = `Logged in as ${character.name}`;
+}
+
+function resetSheetState() {
+  activeProfile = null;
+  if (pageHeader) pageHeader.classList.add("hidden");
+  if (sheetSection) sheetSection.classList.add("hidden");
+  if (randomizeButton) randomizeButton.disabled = true;
+  if (signOutButton) signOutButton.disabled = true;
+  if (statusPill) statusPill.textContent = "Locked";
+  if (navSubtitle) navSubtitle.textContent = "Loading profile…";
+  clearContainers();
+}
+
+function handleLoginPage() {
+  if (!loginForm) return;
+
+  loginForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(loginForm);
+    const username = formData.get("username");
+    const password = formData.get("password");
+
+    const profile = authenticate(username, password);
+    if (!profile) {
+      if (loginError) loginError.textContent = "Invalid name or password. Try again.";
+      return;
+    }
+
+    setStoredProfile(profile.key);
+    if (loginError) loginError.textContent = "";
+    window.location.href = "main.html";
+  });
+}
+
+function redirectToLogin() {
+  window.location.replace("index.html");
+}
+
+function handleSheetPage() {
+  if (!sheetSection) return;
+
+  const storedProfile = loadStoredProfile();
+  if (!storedProfile) {
+    redirectToLogin();
+    return;
+  }
+
+  const character = characters[storedProfile.characterIndex];
+  renderCharacter(character);
+  setAuthenticatedState(storedProfile, character);
+
+  signOutButton?.addEventListener("click", () => {
+    clearStoredProfile();
+    resetSheetState();
+    redirectToLogin();
+  });
+
+  randomizeButton?.addEventListener("click", () => {
+    if (!activeProfile) return;
+    const pick = activeProfile.characterIndex;
+    renderCharacter(characters[pick]);
+  });
+}
+
+handleLoginPage();
+handleSheetPage();

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaign Character Sheet</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <span class="nav-brand">Campaign Console</span>
+      <span class="nav-subtitle" id="nav-subtitle">Loading profile…</span>
+    </div>
+    <div class="nav-actions">
+      <button class="ghost" id="sign-out" disabled>Sign out</button>
+    </div>
+  </nav>
+
+  <header class="page-header hidden" id="page-header">
+    <div>
+      <p class="eyebrow">Campaign Companion</p>
+      <h1>Character Sheet</h1>
+      <p class="tagline">Lightweight helper for GMs and players</p>
+    </div>
+    <div class="meta">
+      <span class="pill" id="status-pill">Locked</span>
+      <button id="randomize" class="ghost" disabled>Randomize</button>
+    </div>
+  </header>
+
+  <main class="sheet hidden" id="sheet">
+    <section class="identity">
+      <div>
+        <p class="label">Name</p>
+        <h2 id="char-name">—</h2>
+      </div>
+      <div class="badges">
+        <span class="badge" id="char-class">Class</span>
+        <span class="badge" id="char-level">Level</span>
+        <span class="badge" id="char-alignment">Alignment</span>
+      </div>
+    </section>
+
+    <section class="stat-block">
+      <header>
+        <div>
+          <p class="label">Vitals</p>
+          <h3>Quick glance</h3>
+        </div>
+        <div class="meta-text" id="char-origin"></div>
+      </header>
+      <div class="grid grid-6" id="vitals"></div>
+    </section>
+
+    <section class="stat-block">
+      <header>
+        <div>
+          <p class="label">Core Attributes</p>
+          <h3>Primary stats</h3>
+        </div>
+      </header>
+      <div class="grid grid-3" id="attributes"></div>
+    </section>
+
+    <section class="stat-block">
+      <header>
+        <div>
+          <p class="label">Skills</p>
+          <h3>Trained and known proficiencies</h3>
+        </div>
+      </header>
+      <ul class="chips" id="skills"></ul>
+    </section>
+
+    <section class="stat-block">
+      <header>
+        <div>
+          <p class="label">Equipment</p>
+          <h3>Carried gear</h3>
+        </div>
+      </header>
+      <div class="grid grid-2" id="gear"></div>
+    </section>
+
+    <section class="stat-block">
+      <header>
+        <div>
+          <p class="label">Spells</p>
+          <h3>Prepared incantations</h3>
+        </div>
+      </header>
+      <div class="grid grid-2" id="spells"></div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>Use this sheet to track quick stats during a session. Extend with your own rules and data.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
