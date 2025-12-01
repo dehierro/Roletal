@@ -133,33 +133,33 @@ const credentialProfiles = {
   branik: { password: "ember", characterIndex: 2, title: "Smith" }
 };
 
-const manualPdfUrl =
-  "https://basicfantasy.org/showcase-download.cgi/1330/Basic-Fantasy-RPG-Player-Handbook-r139.pdf?__cf_chl_tk=g6koKh6CmtBch5gVdI28EKX4XprPdX7fX3r0e0qkxtc-1764618570-1.0.1.1-45AzNx6u4QaiYq19UY7Euh5S2G.vfTXc1Ugg.cMeiow";
+const manualPdfUrl = "Manuals/Basic-Fantasy-RPG-Player-Handbook-r139.pdf";
+const manualDownloadName = "Basic-Fantasy-RPG-Player-Handbook-r139.pdf";
 
 const manualLibrary = {
   aris: {
     title: "Mistwood Operations Manual",
     description: "Guidance and rulings for Aris' scouting missions.",
     file: manualPdfUrl,
-    downloadName: "basic-fantasy-rpg-player-handbook.pdf"
+    downloadName: manualDownloadName
   },
   sable: {
     title: "Shadow Binder's Reference",
     description: "Notes, rituals, and table rules for Sable's campaigns.",
     file: manualPdfUrl,
-    downloadName: "basic-fantasy-rpg-player-handbook.pdf"
+    downloadName: manualDownloadName
   },
   branik: {
     title: "Emberhold Field Guide",
     description: "Equipment care and tactics for Branik's deployments.",
     file: manualPdfUrl,
-    downloadName: "basic-fantasy-rpg-player-handbook.pdf"
+    downloadName: manualDownloadName
   },
   default: {
     title: "Campaign Manual",
     description: "Reference guide for your active campaign.",
     file: manualPdfUrl,
-    downloadName: "basic-fantasy-rpg-player-handbook.pdf"
+    downloadName: manualDownloadName
   }
 };
 
