@@ -12,6 +12,12 @@
       <span class="nav-brand">Campaign Console</span>
       <span class="nav-subtitle" id="nav-subtitle">Loading profile…</span>
     </div>
+    <div class="nav-menu" aria-label="Page navigation">
+      <a href="#sheet">Sheet</a>
+      <a href="#history">History</a>
+      <a href="#manual">Game's Manual</a>
+      <a href="#dice">Dice</a>
+    </div>
     <div class="nav-actions">
       <button class="ghost" id="sign-out" disabled>Sign out</button>
     </div>
@@ -30,7 +36,7 @@
   </header>
 
   <main class="sheet hidden" id="sheet">
-    <section class="identity">
+    <section class="identity" id="identity">
       <div>
         <p class="label">Name</p>
         <h2 id="char-name">—</h2>
@@ -42,7 +48,7 @@
       </div>
     </section>
 
-    <section class="stat-block">
+    <section class="stat-block" id="vitals-section">
       <header>
         <div>
           <p class="label">Vitals</p>
@@ -53,7 +59,7 @@
       <div class="grid grid-6" id="vitals"></div>
     </section>
 
-    <section class="stat-block">
+    <section class="stat-block" id="attributes-section">
       <header>
         <div>
           <p class="label">Core Attributes</p>
@@ -63,7 +69,7 @@
       <div class="grid grid-3" id="attributes"></div>
     </section>
 
-    <section class="stat-block">
+    <section class="stat-block" id="skills-section">
       <header>
         <div>
           <p class="label">Skills</p>
@@ -73,7 +79,7 @@
       <ul class="chips" id="skills"></ul>
     </section>
 
-    <section class="stat-block">
+    <section class="stat-block" id="gear-section">
       <header>
         <div>
           <p class="label">Equipment</p>
@@ -83,7 +89,7 @@
       <div class="grid grid-2" id="gear"></div>
     </section>
 
-    <section class="stat-block">
+    <section class="stat-block" id="spells-section">
       <header>
         <div>
           <p class="label">Spells</p>
