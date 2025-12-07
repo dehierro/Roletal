@@ -36,11 +36,49 @@ const characters = [
       { title: "Traveler's Cloak", detail: "+2 to saves vs. cold; advantage on stealth in rain" },
       { title: "Explorer's Pack", detail: "Grapnel, 50 ft silk rope, maps of Lithmoor" }
     ],
-    spells: [
-      { title: "Gust Step", detail: "Bonus action, dash and hover 10 ft" },
-      { title: "Pulse Arrow", detail: "2d6 force, pushes 10 ft on hit" },
-      { title: "Veil of Mist", detail: "10-ft radius obscurement for 1 minute" },
-      { title: "Whispering Mark", detail: "Mark a target and know its direction for 1 day" }
+    abilities: [
+      {
+        title: "Gust Step",
+        detail: "Bonus action, dash and hover 10 ft",
+        type: "Spell",
+        affinity: "Air",
+        scalesWith: ["Dexterity"],
+      },
+      {
+        title: "Pulse Arrow",
+        detail: "2d6 force, pushes 10 ft on hit",
+        type: "Spell",
+        affinity: "Force",
+        scalesWith: ["Dexterity", "Intelligence"],
+      },
+      {
+        title: "Veil of Mist",
+        detail: "10-ft radius obscurement for 1 minute",
+        type: "Spell",
+        affinity: "Fog",
+        scalesWith: ["Wisdom"],
+      },
+      {
+        title: "Whispering Mark",
+        detail: "Mark a target and know its direction for 1 day",
+        type: "Spell",
+        affinity: "Divination",
+        scalesWith: ["Intelligence"],
+      },
+      {
+        title: "Skirmisher's Flow",
+        detail: "After moving 10 ft, gain +2 AC until start of next turn.",
+        type: "Talent",
+        affinity: "Scoutcraft",
+        scalesWith: ["Dexterity", "Wisdom"],
+      },
+      {
+        title: "Surveyor's Recall",
+        detail: "Memorize a 1-mile route; advantage on navigation checks.",
+        type: "Talent",
+        affinity: "Exploration",
+        scalesWith: ["Intelligence", "Wisdom"],
+      },
     ]
   },
   {
@@ -78,10 +116,42 @@ const characters = [
       { title: "Half-mask of Whispers", detail: "Once per short rest, cast *disguise self*" },
       { title: "Shadowstep Boots", detail: "Teleport 15 ft as bonus action 2/day" }
     ],
-    spells: [
-      { title: "Binding Vines", detail: "Restrains target on failed Dex save" },
-      { title: "Hollow Ward", detail: "Negates necrotic damage up to 12 points" },
-      { title: "Curtain of Night", detail: "20-ft wall of darkness; blocks line of sight" }
+    abilities: [
+      {
+        title: "Binding Vines",
+        detail: "Restrains target on failed Dex save",
+        type: "Spell",
+        affinity: "Shadowroot",
+        scalesWith: ["Intelligence"],
+      },
+      {
+        title: "Hollow Ward",
+        detail: "Negates necrotic damage up to 12 points",
+        type: "Spell",
+        affinity: "Ward",
+        scalesWith: ["Intelligence", "Charisma"],
+      },
+      {
+        title: "Curtain of Night",
+        detail: "20-ft wall of darkness; blocks line of sight",
+        type: "Spell",
+        affinity: "Umbral",
+        scalesWith: ["Charisma"],
+      },
+      {
+        title: "Mask Theater",
+        detail: "Advantage on Deception after casting an illusion this turn.",
+        type: "Talent",
+        affinity: "Courtly Ruse",
+        scalesWith: ["Charisma", "Dexterity"],
+      },
+      {
+        title: "Anchor the Weak",
+        detail: "When an ally fails a save, impose disadvantage on the triggering foe next round.",
+        type: "Technique",
+        affinity: "Binder's Oath",
+        scalesWith: ["Intelligence", "Wisdom"],
+      },
     ]
   },
   {
@@ -120,9 +190,35 @@ const characters = [
       { title: "Shield of the Emberhold", detail: "+2 AC; resistance to fire" },
       { title: "Toolkit", detail: "Blacksmith tools, artisan's kit, battle plans" }
     ],
-    spells: [
-      { title: "Steel Ward", detail: "+2 AC for 10 minutes" },
-      { title: "Repair", detail: "Restore 2d6 HP to constructs or objects" }
+    abilities: [
+      {
+        title: "Steel Ward",
+        detail: "+2 AC for 10 minutes",
+        type: "Spell",
+        affinity: "Bulwark",
+        scalesWith: ["Constitution"],
+      },
+      {
+        title: "Repair",
+        detail: "Restore 2d6 HP to constructs or objects",
+        type: "Spell",
+        affinity: "Mending",
+        scalesWith: ["Intelligence"],
+      },
+      {
+        title: "Hammer Rhythm",
+        detail: "On a hit, grant allies +1 to melee attacks until your next turn.",
+        type: "Technique",
+        affinity: "Forgecraft",
+        scalesWith: ["Strength", "Constitution"],
+      },
+      {
+        title: "Anchor Stance",
+        detail: "If you haven't moved this round, gain resistance to bludgeoning.",
+        type: "Talent",
+        affinity: "Shieldwork",
+        scalesWith: ["Constitution"],
+      },
     ]
   }
 ];
@@ -285,7 +381,17 @@ const vitalsContainer = document.getElementById("vitals");
 const attributesContainer = document.getElementById("attributes");
 const skillsContainer = document.getElementById("skills");
 const gearContainer = document.getElementById("gear");
-const spellsContainer = document.getElementById("spells");
+const abilitiesPageSection = document.getElementById("abilities-page");
+const abilitiesHeader = document.getElementById("abilities-header");
+const signatureAbilitiesContainer = document.getElementById("abilities-signature");
+const magicalAbilitiesContainer = document.getElementById("abilities-spells");
+const abilitiesSummary = document.getElementById("abilities-summary");
+const abilitiesHelper = document.getElementById("abilities-helper");
+const inventorySection = document.getElementById("inventory");
+const inventoryHeader = document.getElementById("inventory-header");
+const inventoryGearContainer = document.getElementById("inventory-gear");
+const inventorySummary = document.getElementById("inventory-summary");
+const inventoryHelper = document.getElementById("inventory-helper");
 const worldNotes = document.getElementById("world-notes");
 const characterNotes = document.getElementById("character-notes");
 const eventNotes = document.getElementById("event-notes");
@@ -363,11 +469,54 @@ function renderGear(item) {
   return div;
 }
 
-function renderSpell(spell) {
+function renderAbility(ability) {
   const div = document.createElement("div");
   div.className = "card";
-  div.innerHTML = `<h4>${spell.title}</h4><p>${spell.detail}</p>`;
+
+  const affinity = ability.affinity
+    ? `<span class="pill pill-soft">${ability.affinity}</span>`
+    : "";
+  const scaling = ability.scalesWith?.length
+    ? `<span class="pill pill-muted">Scales: ${ability.scalesWith.join(", ")}</span>`
+    : "";
+
+  div.innerHTML = `
+    <div class="chip-row">
+      <span class="pill pill-strong">${ability.type || "Ability"}</span>
+      ${affinity}
+      ${scaling}
+    </div>
+    <h4>${ability.title}</h4>
+    <p>${ability.detail}</p>
+  `;
+
   return div;
+}
+
+function renderInventorySummary(character) {
+  if (!inventorySummary) return;
+
+  const summary = [
+    { label: "Role", value: `${character.class} (Level ${character.level})` },
+    { label: "Gear Count", value: `${character.gear.length} packed items` },
+    { label: "Ability Prep", value: `${character.abilities.length} techniques ready` },
+  ];
+
+  inventorySummary.innerHTML = "";
+
+  for (let i = 0; i < summary.length; i += 2) {
+    const row = document.createElement("div");
+    row.className = "highlight-row";
+
+    summary.slice(i, i + 2).forEach((item) => {
+      const card = document.createElement("div");
+      card.className = "highlight-card";
+      card.innerHTML = `<span class="label">${item.label}</span><strong>${item.value}</strong>`;
+      row.appendChild(card);
+    });
+
+    inventorySummary.appendChild(row);
+  }
 }
 
 function renderHistoryList(container, entries) {
@@ -505,7 +654,6 @@ function clearContainers() {
   if (attributesContainer) attributesContainer.innerHTML = "";
   if (skillsContainer) skillsContainer.innerHTML = "";
   if (gearContainer) gearContainer.innerHTML = "";
-  if (spellsContainer) spellsContainer.innerHTML = "";
 }
 
 function renderCharacter(character) {
@@ -535,10 +683,89 @@ function renderCharacter(character) {
   character.gear.forEach((item) => {
     gearContainer?.appendChild(renderGear(item));
   });
+}
 
-  character.spells.forEach((spell) => {
-    spellsContainer?.appendChild(renderSpell(spell));
+function renderInventory(character) {
+  if (!character || !inventorySection) return;
+
+  if (inventoryGearContainer) {
+    inventoryGearContainer.innerHTML = "";
+    character.gear.forEach((item) => {
+      inventoryGearContainer.appendChild(renderGear(item));
+    });
+  }
+
+  renderInventorySummary(character);
+
+  if (inventoryHelper)
+    inventoryHelper.textContent = `Loadout ready for ${character.name} (${character.class})`;
+}
+
+function renderAbilitiesOverview(character) {
+  if (!abilitiesSummary) return;
+
+  const total = character.abilities.length;
+  const spellCount = character.abilities.filter((entry) => entry.type?.toLowerCase() === "spell").length;
+  const talentCount = total - spellCount;
+
+  const scaleCounts = character.abilities.reduce((acc, ability) => {
+    (ability.scalesWith || []).forEach((attr) => {
+      const key = attr.trim();
+      acc[key] = (acc[key] || 0) + 1;
+    });
+    return acc;
+  }, {});
+
+  const primaryScales = Object.entries(scaleCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 2)
+    .map(([attr, count]) => `${attr} (${count})`);
+
+  const summary = [
+    { label: "Total Abilities", value: `${total} documented` },
+    { label: "Spellcraft", value: `${spellCount} prepared` },
+    { label: "Techniques", value: `${talentCount} trained` },
+    { label: "Key Scaling", value: primaryScales.join(", ") || "—" },
+  ];
+
+  abilitiesSummary.innerHTML = "";
+
+  for (let i = 0; i < summary.length; i += 2) {
+    const row = document.createElement("div");
+    row.className = "highlight-row";
+
+    summary.slice(i, i + 2).forEach((item) => {
+      const card = document.createElement("div");
+      card.className = "highlight-card";
+      card.innerHTML = `<span class="label">${item.label}</span><strong>${item.value}</strong>`;
+      row.appendChild(card);
+    });
+
+    abilitiesSummary.appendChild(row);
+  }
+}
+
+function renderAbilities(character) {
+  if (!character || !abilitiesPageSection) return;
+
+  if (signatureAbilitiesContainer) signatureAbilitiesContainer.innerHTML = "";
+  if (magicalAbilitiesContainer) magicalAbilitiesContainer.innerHTML = "";
+
+  const magical = character.abilities.filter((ability) => ability.type?.toLowerCase() === "spell");
+  const signatures = character.abilities.filter((ability) => ability.type?.toLowerCase() !== "spell");
+
+  signatures.forEach((ability) => {
+    signatureAbilitiesContainer?.appendChild(renderAbility(ability));
   });
+
+  magical.forEach((ability) => {
+    magicalAbilitiesContainer?.appendChild(renderAbility(ability));
+  });
+
+  renderAbilitiesOverview(character);
+
+  if (abilitiesHelper)
+    abilitiesHelper.textContent = `Showing ${character.class} abilities for ${character.name}`;
 }
 
 function renderHistory() {
@@ -830,6 +1057,52 @@ function handleDicePage() {
   });
 }
 
+function handleInventoryPage() {
+  if (!inventorySection) return;
+
+  const storedProfile = loadStoredProfile();
+  if (!storedProfile) {
+    redirectToLogin();
+    return;
+  }
+
+  const character = characters[storedProfile.characterIndex];
+  renderInventory(character);
+
+  if (navSubtitle && character) navSubtitle.textContent = `Inventory for ${character.name}`;
+  if (statusPill) statusPill.textContent = "Ready";
+  if (inventoryHeader) inventoryHeader.classList.remove("hidden");
+  if (signOutButton) signOutButton.disabled = false;
+
+  signOutButton?.addEventListener("click", () => {
+    clearStoredProfile();
+    redirectToLogin();
+  });
+}
+
+function handleAbilitiesPage() {
+  if (!abilitiesPageSection) return;
+
+  const storedProfile = loadStoredProfile();
+  if (!storedProfile) {
+    redirectToLogin();
+    return;
+  }
+
+  const character = characters[storedProfile.characterIndex];
+  renderAbilities(character);
+
+  if (navSubtitle && character) navSubtitle.textContent = `Abilities for ${character.name}`;
+  if (statusPill) statusPill.textContent = "Ready";
+  if (abilitiesHeader) abilitiesHeader.classList.remove("hidden");
+  if (signOutButton) signOutButton.disabled = false;
+
+  signOutButton?.addEventListener("click", () => {
+    clearStoredProfile();
+    redirectToLogin();
+  });
+}
+
 function handleSheetPage() {
   if (!sheetSection) return;
 
@@ -859,6 +1132,8 @@ function handleSheetPage() {
 
 handleLoginPage();
 handleSheetPage();
+handleAbilitiesPage();
+handleInventoryPage();
 handleManualPage();
 handleHistoryPage();
 handleDicePage();

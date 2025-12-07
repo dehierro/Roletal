@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaign Inventory</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="inventory-page">
+  <nav class="top-nav">
+    <div class="nav-left">
+      <span class="nav-brand">Campaign Console</span>
+      <span class="nav-subtitle" id="nav-subtitle">Loading inventory…</span>
+    </div>
+    <div class="nav-menu" aria-label="Page navigation">
+      <a href="main.html">Sheet</a>
+      <a href="abilities.html">Abilities</a>
+      <a href="inventory.html" aria-current="page">Inventory</a>
+      <a href="history.html">History</a>
+      <a href="manual.html">Game's Manual</a>
+      <a href="dice.html">Dice</a>
+    </div>
+    <div class="nav-actions">
+      <button class="ghost" id="sign-out" disabled>Sign out</button>
+    </div>
+  </nav>
+
+  <header class="page-header page-hero" id="inventory-header">
+    <div class="hero-copy">
+      <p class="eyebrow">Campaign Companion</p>
+      <h1>Pack Ledger</h1>
+      <p class="tagline">Track what the party is carrying without crowding the sheet.</p>
+      <div class="hero-badges">
+        <span class="pill pill-soft" id="inventory-helper">Loading loadout…</span>
+      </div>
+      <div class="meta">
+        <span class="pill" id="status-pill">Locked</span>
+      </div>
+    </div>
+    <div class="hero-panel">
+      <div class="hero-panel-header">
+        <p class="label">Bag overview</p>
+        <span class="glyph">🎒</span>
+      </div>
+      <div class="hero-panel-body" id="inventory-summary"></div>
+    </div>
+  </header>
+
+  <main class="sheet" id="inventory">
+    <section class="stat-block">
+      <header>
+        <div>
+          <p class="label">Carried Gear</p>
+          <h3>Items at the ready</h3>
+          <p class="meta-text">Weapons, tools, and packs assigned to this character.</p>
+        </div>
+      </header>
+      <div class="grid grid-2" id="inventory-gear"></div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>Use this ledger to keep pack swaps and spell prep tidy between encounters.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaign Abilities</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="abilities-page">
+  <nav class="top-nav">
+    <div class="nav-left">
+      <span class="nav-brand">Campaign Console</span>
+      <span class="nav-subtitle" id="nav-subtitle">Loading abilities…</span>
+    </div>
+    <div class="nav-menu" aria-label="Page navigation">
+      <a href="main.html">Sheet</a>
+      <a href="abilities.html" aria-current="page">Abilities</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="history.html">History</a>
+      <a href="manual.html">Game's Manual</a>
+      <a href="dice.html">Dice</a>
+    </div>
+    <div class="nav-actions">
+      <button class="ghost" id="sign-out" disabled>Sign out</button>
+    </div>
+  </nav>
+
+  <header class="page-header page-hero" id="abilities-header">
+    <div class="hero-copy">
+      <p class="eyebrow">Campaign Companion</p>
+      <h1>Abilities &amp; Affinities</h1>
+      <p class="tagline">Spellcraft, martial techniques, and how they scale for this character.</p>
+      <div class="hero-badges">
+        <span class="pill pill-soft" id="abilities-helper">Loading kit…</span>
+      </div>
+      <div class="meta">
+        <span class="pill" id="status-pill">Locked</span>
+      </div>
+    </div>
+    <div class="hero-panel">
+      <div class="hero-panel-header">
+        <p class="label">Capability overview</p>
+        <span class="glyph">✨</span>
+      </div>
+      <div class="hero-panel-body" id="abilities-summary"></div>
+    </div>
+  </header>
+
+  <main class="sheet" id="abilities-page">
+    <section class="stat-block" id="signature-abilities-section">
+      <header>
+        <div>
+          <p class="label">Signature Abilities</p>
+          <h3>Class techniques &amp; talents</h3>
+          <p class="meta-text">Highlights non-magical maneuvers and learned capabilities.</p>
+        </div>
+      </header>
+      <div class="grid grid-2" id="abilities-signature"></div>
+    </section>
+
+    <section class="stat-block" id="magical-abilities-section">
+      <header>
+        <div>
+          <p class="label">Magical Abilities</p>
+          <h3>Spellcraft &amp; gifts</h3>
+          <p class="meta-text">Focuses on arcane, divine, or primal powers tied to attributes.</p>
+        </div>
+      </header>
+      <div class="grid grid-2" id="abilities-spells"></div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>Use this space to capture how abilities scale, interact, and grow between sessions.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
