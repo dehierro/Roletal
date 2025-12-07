@@ -450,15 +450,22 @@ let pdfRendering = false;
 
 function renderVital(title, value) {
   const div = document.createElement("div");
-  div.className = "card stat-line";
-  div.innerHTML = `<span>${title}</span><strong>${value}</strong>`;
+  div.className = "card stat-line vital-card";
+  div.innerHTML = `<p class="label">${title}</p><strong>${value}</strong>`;
   return div;
 }
 
 function renderAttribute(title, data) {
   const div = document.createElement("div");
-  div.className = "card";
-  div.innerHTML = `<div class="stat-line"><span>${title}</span><strong>${data.score}</strong></div><p>Modifier: ${data.mod}</p>`;
+  div.className = "card ability-card";
+  div.innerHTML = `
+    <div class="ability-top">
+      <span class="label">${title}</span>
+      <span class="ability-mod">${data.mod}</span>
+    </div>
+    <div class="ability-score">${data.score}</div>
+    <p class="ability-foot">Modifier</p>
+  `;
   return div;
 }
 
