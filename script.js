@@ -187,14 +187,25 @@ const manualHeader = document.getElementById("manual-header");
 const manualTitle = document.getElementById("manual-title");
 const manualDescription = document.getElementById("manual-description");
 const manualHelper = document.getElementById("manual-helper");
-const manualViewer = document.getElementById("manual-viewer");
 const manualDownload = document.getElementById("manual-download");
 const manualViewerSection = document.getElementById("manual-viewer-section");
+const manualCanvas = document.getElementById("manual-canvas");
+const manualPageNum = document.getElementById("manual-page-num");
+const manualPageCount = document.getElementById("manual-page-count");
+const manualPrev = document.getElementById("manual-prev");
+const manualNext = document.getElementById("manual-next");
+const manualZoomOut = document.getElementById("manual-zoom-out");
+const manualZoomIn = document.getElementById("manual-zoom-in");
+const manualZoomReset = document.getElementById("manual-zoom-reset");
 
 const loginForm = document.getElementById("login-form");
 const loginError = document.getElementById("login-error");
 
 let activeProfile = null;
+let pdfDocument = null;
+let pdfCurrentPage = 1;
+let pdfScale = 1.1;
+let pdfRendering = false;
 
 function renderVital(title, value) {
   const div = document.createElement("div");
@@ -338,6 +349,90 @@ function resolveManual(profile) {
   return manualLibrary[profile.key] || manualLibrary.default;
 }
 
+function updatePageIndicators() {
+  if (manualPageNum) manualPageNum.textContent = pdfCurrentPage.toString();
+  if (manualPageCount) manualPageCount.textContent = pdfDocument?.numPages?.toString() || "—";
+}
+
+async function renderPdfPage(pageNumber) {
+  if (!manualCanvas || !pdfDocument) return;
+  pdfRendering = true;
+  const context = manualCanvas.getContext("2d");
+  if (!context) return;
+
+  try {
+    const page = await pdfDocument.getPage(pageNumber);
+    const viewport = page.getViewport({ scale: pdfScale });
+    manualCanvas.height = viewport.height;
+    manualCanvas.width = viewport.width;
+
+    await page.render({ canvasContext: context, viewport }).promise;
+    pdfCurrentPage = pageNumber;
+    if (manualHelper) manualHelper.textContent = `Showing page ${pdfCurrentPage} of ${pdfDocument.numPages}`;
+    updatePageIndicators();
+  } catch (error) {
+    console.error(error);
+    if (manualHelper) manualHelper.textContent = "Unable to display this page. Try downloading the PDF.";
+  } finally {
+    pdfRendering = false;
+  }
+}
+
+function queueRender(pageNumber) {
+  if (pdfRendering) return;
+  if (!pdfDocument) return;
+  renderPdfPage(pageNumber);
+}
+
+function attachManualControls() {
+  manualPrev?.addEventListener("click", () => {
+    if (!pdfDocument || pdfCurrentPage <= 1) return;
+    queueRender(pdfCurrentPage - 1);
+  });
+
+  manualNext?.addEventListener("click", () => {
+    if (!pdfDocument || pdfCurrentPage >= pdfDocument.numPages) return;
+    queueRender(pdfCurrentPage + 1);
+  });
+
+  manualZoomIn?.addEventListener("click", () => {
+    pdfScale = Math.min(pdfScale + 0.15, 3);
+    queueRender(pdfCurrentPage);
+  });
+
+  manualZoomOut?.addEventListener("click", () => {
+    pdfScale = Math.max(pdfScale - 0.15, 0.5);
+    queueRender(pdfCurrentPage);
+  });
+
+  manualZoomReset?.addEventListener("click", () => {
+    pdfScale = 1.1;
+    queueRender(pdfCurrentPage);
+  });
+}
+
+async function loadPdf(manual) {
+  if (!manualCanvas || !window.pdfjsLib) return;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js";
+
+  try {
+    if (manualHelper) manualHelper.textContent = "Loading PDF viewer…";
+    const loadingTask = pdfjsLib.getDocument(manual.file);
+    pdfDocument = await loadingTask.promise;
+    pdfCurrentPage = 1;
+    updatePageIndicators();
+    await renderPdfPage(pdfCurrentPage);
+  } catch (error) {
+    console.error(error);
+    if (manualHelper) manualHelper.textContent = "Could not load the PDF inline. Please download it.";
+  }
+}
+
+function setupManualViewer(manual) {
+  attachManualControls();
+  loadPdf(manual);
+}
+
 function handleManualPage() {
   if (!manualViewerSection) return;
 
@@ -355,11 +450,12 @@ function handleManualPage() {
   if (manualDescription) manualDescription.textContent = manual.description;
   if (manualHelper && character)
     manualHelper.textContent = `Showing manual for ${character.name} (${storedProfile.title})`;
-  if (manualViewer) manualViewer.src = manual.file;
   if (manualDownload) {
     manualDownload.href = manual.file;
     manualDownload.download = manual.downloadName || "campaign-manual.pdf";
   }
+
+  setupManualViewer(manual);
 
   if (navSubtitle && character) navSubtitle.textContent = `Manual for ${character.name}`;
   if (statusPill) statusPill.textContent = "Ready";
