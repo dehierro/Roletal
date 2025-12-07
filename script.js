@@ -259,6 +259,7 @@ const statusPill = document.getElementById("status-pill");
 const navSubtitle = document.getElementById("nav-subtitle");
 const signOutButton = document.getElementById("sign-out");
 const randomizeButton = document.getElementById("randomize");
+const historyHeader = document.getElementById("history-header");
 const manualHeader = document.getElementById("manual-header");
 const manualTitle = document.getElementById("manual-title");
 const manualDescription = document.getElementById("manual-description");
@@ -273,6 +274,13 @@ const manualNext = document.getElementById("manual-next");
 const manualZoomOut = document.getElementById("manual-zoom-out");
 const manualZoomIn = document.getElementById("manual-zoom-in");
 const manualZoomReset = document.getElementById("manual-zoom-reset");
+const diceForm = document.getElementById("dice-form");
+const diceOutput = document.getElementById("dice-output");
+const diceLog = document.getElementById("dice-log");
+const diceCountInput = document.getElementById("dice-count");
+const diceSidesSelect = document.getElementById("dice-sides");
+const diceModifierInput = document.getElementById("dice-mod");
+const diceClearButton = document.getElementById("dice-clear");
 
 const loginForm = document.getElementById("login-form");
 const loginError = document.getElementById("login-error");
@@ -386,6 +394,37 @@ function renderHistory() {
   renderHistoryList(characterNotes, historyData.characters);
   renderHistoryList(eventNotes, historyData.events);
   renderHistoryList(questNotes, historyData.quests);
+}
+
+function rollDice(count, sides) {
+  const rolls = [];
+  for (let i = 0; i < count; i += 1) {
+    rolls.push(Math.floor(Math.random() * sides) + 1);
+  }
+  return rolls;
+}
+
+function renderDiceResults(rolls, modifier) {
+  if (!diceOutput || !diceLog) return;
+  diceOutput.innerHTML = "";
+
+  const subtotal = rolls.reduce((sum, value) => sum + value, 0);
+  const total = subtotal + modifier;
+
+  const detail = document.createElement("div");
+  detail.className = "stat-line";
+  detail.innerHTML = `<span>Roll</span><strong>${rolls.join(" + ")}${modifier ? ` ${modifier > 0 ? "+" : "-"} ${Math.abs(modifier)}` : ""}</strong>`;
+  diceOutput.appendChild(detail);
+
+  const totalRow = document.createElement("div");
+  totalRow.className = "stat-line";
+  totalRow.innerHTML = `<span>Total</span><strong>${total}</strong>`;
+  diceOutput.appendChild(totalRow);
+
+  const logEntry = document.createElement("li");
+  logEntry.className = "history-item";
+  logEntry.innerHTML = `<strong>${total}</strong><p class="meta-text">Rolls: ${rolls.join(", ")}; Modifier: ${modifier >= 0 ? "+" : ""}${modifier}</p>`;
+  diceLog.prepend(logEntry);
 }
 
 function authenticate(username, password) {
@@ -581,6 +620,63 @@ function handleManualPage() {
   });
 }
 
+function handleHistoryPage() {
+  if (!historySection) return;
+
+  const storedProfile = loadStoredProfile();
+  if (!storedProfile) {
+    redirectToLogin();
+    return;
+  }
+
+  const character = characters[storedProfile.characterIndex];
+  renderHistory();
+
+  if (navSubtitle && character) navSubtitle.textContent = `History for ${character.name}`;
+  if (statusPill) statusPill.textContent = "Ready";
+  if (historyHeader) historyHeader.classList.remove("hidden");
+  if (signOutButton) signOutButton.disabled = false;
+
+  signOutButton?.addEventListener("click", () => {
+    clearStoredProfile();
+    redirectToLogin();
+  });
+}
+
+function handleDicePage() {
+  if (!diceForm || !diceOutput) return;
+
+  const storedProfile = loadStoredProfile();
+  if (!storedProfile) {
+    redirectToLogin();
+    return;
+  }
+
+  const character = characters[storedProfile.characterIndex];
+  if (navSubtitle && character) navSubtitle.textContent = `Dice for ${character.name}`;
+  if (statusPill) statusPill.textContent = "Ready";
+  if (signOutButton) signOutButton.disabled = false;
+
+  diceForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const count = parseInt(diceCountInput?.value || "1", 10);
+    const sides = parseInt(diceSidesSelect?.value || "6", 10);
+    const modifier = parseInt(diceModifierInput?.value || "0", 10);
+    const rolls = rollDice(Math.max(1, count), Math.max(2, sides));
+    renderDiceResults(rolls, modifier);
+  });
+
+  diceClearButton?.addEventListener("click", () => {
+    if (diceOutput) diceOutput.innerHTML = '<p class="meta-text">No rolls yet.</p>';
+    diceLog?.replaceChildren();
+  });
+
+  signOutButton?.addEventListener("click", () => {
+    clearStoredProfile();
+    redirectToLogin();
+  });
+}
+
 function handleSheetPage() {
   if (!sheetSection) return;
 
@@ -611,3 +707,5 @@ function handleSheetPage() {
 handleLoginPage();
 handleSheetPage();
 handleManualPage();
+handleHistoryPage();
+handleDicePage();

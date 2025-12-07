@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaign Dice Roller</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <span class="nav-brand">Campaign Console</span>
+      <span class="nav-subtitle" id="nav-subtitle">Preparing dice tools…</span>
+    </div>
+    <div class="nav-menu" aria-label="Page navigation">
+      <a href="main.html">Sheet</a>
+      <a href="history.html">History</a>
+      <a href="manual.html">Game's Manual</a>
+      <a href="dice.html" aria-current="page">Dice</a>
+    </div>
+    <div class="nav-actions">
+      <button class="ghost" id="sign-out" disabled>Sign out</button>
+    </div>
+  </nav>
+
+  <header class="page-header" id="dice-header">
+    <div>
+      <p class="eyebrow">Campaign Companion</p>
+      <h1>Dice Roller</h1>
+      <p class="tagline">Quick rolls for checks, saves, and damage.</p>
+    </div>
+    <div class="meta">
+      <span class="pill" id="status-pill">Locked</span>
+    </div>
+  </header>
+
+  <main class="sheet" id="dice-tools">
+    <section class="stat-block">
+      <header>
+        <div>
+          <p class="label">Roll builder</p>
+          <h3>Choose your dice</h3>
+        </div>
+      </header>
+      <div class="card">
+        <form class="dice-form" id="dice-form">
+          <div class="grid grid-2">
+            <label>
+              Quantity
+              <input type="number" id="dice-count" name="dice-count" min="1" max="20" value="1" required />
+            </label>
+            <label>
+              Dice type
+              <select id="dice-sides" name="dice-sides">
+                <option value="4">d4</option>
+                <option value="6" selected>d6</option>
+                <option value="8">d8</option>
+                <option value="10">d10</option>
+                <option value="12">d12</option>
+                <option value="20">d20</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            Modifier
+            <input type="number" id="dice-mod" name="dice-mod" value="0" />
+          </label>
+          <div class="dice-actions">
+            <button class="primary" type="submit">Roll</button>
+            <button class="ghost" type="button" id="dice-clear">Clear log</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="stat-block" id="dice-results">
+      <header>
+        <div>
+          <p class="label">Results</p>
+          <h3>Latest rolls</h3>
+        </div>
+      </header>
+      <div class="card" id="dice-output">
+        <p class="meta-text">No rolls yet.</p>
+      </div>
+      <ul class="history-list" id="dice-log" aria-live="polite"></ul>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>Use the roller for fast checks without leaving the console.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

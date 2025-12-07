@@ -136,6 +136,28 @@ h1, h2, h3, h4, p {
   font-size: 15px;
 }
 
+.dice-form {
+  display: grid;
+  gap: 10px;
+}
+
+.dice-form input,
+.dice-form select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-size: 15px;
+}
+
+.dice-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .login-card input:focus {
   outline: 2px solid var(--accent);
 }

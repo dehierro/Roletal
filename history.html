@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaign History</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <span class="nav-brand">Campaign Console</span>
+      <span class="nav-subtitle" id="nav-subtitle">Loading history…</span>
+    </div>
+    <div class="nav-menu" aria-label="Page navigation">
+      <a href="main.html">Sheet</a>
+      <a href="history.html" aria-current="page">History</a>
+      <a href="manual.html">Game's Manual</a>
+      <a href="dice.html">Dice</a>
+    </div>
+    <div class="nav-actions">
+      <button class="ghost" id="sign-out" disabled>Sign out</button>
+    </div>
+  </nav>
+
+  <header class="page-header" id="history-header">
+    <div>
+      <p class="eyebrow">Campaign Companion</p>
+      <h1>Campaign Chronicle</h1>
+      <p class="tagline">Reference the world, dramatis personae, pivotal events, and open quests.</p>
+    </div>
+    <div class="meta">
+      <span class="pill" id="status-pill">Locked</span>
+    </div>
+  </header>
+
+  <section class="history" id="history">
+    <header class="history-header">
+      <div>
+        <p class="label">History</p>
+        <h3>Session context</h3>
+        <p class="meta-text">Locations, allies, foes, twists, and quests in one view.</p>
+      </div>
+      <div class="history-legend" aria-label="Legend for quest status">
+        <span class="pill pill-soft">Ongoing</span>
+        <span class="pill pill-muted">Resolved</span>
+        <span class="pill pill-strong">Critical</span>
+      </div>
+    </header>
+
+    <div class="history-grid">
+      <article class="history-card" id="history-world">
+        <div class="history-card-header">
+          <p class="label">World</p>
+          <h4>Key locations &amp; factions</h4>
+        </div>
+        <ul class="history-list" id="world-notes"></ul>
+      </article>
+
+      <article class="history-card" id="history-characters">
+        <div class="history-card-header">
+          <p class="label">Characters</p>
+          <h4>Allies and rivals</h4>
+        </div>
+        <ul class="history-list" id="character-notes"></ul>
+      </article>
+
+      <article class="history-card" id="history-events">
+        <div class="history-card-header">
+          <p class="label">Events</p>
+          <h4>Recent turning points</h4>
+        </div>
+        <ul class="history-list" id="event-notes"></ul>
+      </article>
+
+      <article class="history-card" id="history-quests">
+        <div class="history-card-header">
+          <p class="label">Quests</p>
+          <h4>Active and resolved threads</h4>
+        </div>
+        <ul class="history-list" id="quest-notes"></ul>
+      </article>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    <p>Keep this chronicle handy during sessions to keep everyone aligned on the story.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
