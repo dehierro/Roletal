@@ -19,9 +19,9 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at 20% 20%, rgba(109, 228, 200, 0.1), transparent 30%),
-    radial-gradient(circle at 80% 10%, rgba(135, 186, 255, 0.12), transparent 30%),
-    var(--bg);
+  background: radial-gradient(circle at 18% 20%, rgba(109, 228, 200, 0.12), transparent 32%),
+    radial-gradient(circle at 82% 10%, rgba(135, 186, 255, 0.14), transparent 30%),
+    linear-gradient(140deg, rgba(24, 39, 88, 0.8), rgba(11, 16, 33, 0.9));
   color: var(--text);
   padding: 32px 24px 64px;
 }
@@ -198,6 +198,99 @@ h1, h2, h3, h4, p {
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 24px;
+}
+
+.history-page .page-header {
+  background: linear-gradient(120deg, rgba(17, 24, 54, 0.8), rgba(24, 39, 88, 0.85));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.history-page .page-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 10%, rgba(109, 228, 200, 0.14), transparent 30%),
+    radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.06), transparent 28%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  display: grid;
+  gap: 10px;
+}
+
+.hero-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.page-hero h1 {
+  font-size: clamp(32px, 4vw, 42px);
+  letter-spacing: 0.02em;
+}
+
+.hero-panel {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(160deg, rgba(22, 35, 72, 0.9), rgba(10, 14, 30, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px;
+  min-width: 320px;
+  box-shadow: var(--shadow);
+}
+
+.hero-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.glyph {
+  font-size: 18px;
+  color: var(--accent);
+}
+
+.hero-panel-body {
+  display: grid;
+  gap: 10px;
+}
+
+.highlight-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.highlight-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.highlight-card .label {
+  display: block;
+}
+
+.highlight-card strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 17px;
 }
 
 .page-footer {
@@ -392,17 +485,20 @@ button:active,
 
 .history-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
 }
 
 .history-card {
-  background: var(--panel-strong);
-  border-radius: 10px;
+  background: linear-gradient(150deg, rgba(13, 19, 41, 0.95), rgba(17, 24, 54, 0.9));
+  border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 14px;
+  padding: 16px;
   display: grid;
-  gap: 10px;
+  gap: 12px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
 }
 
 .history-card-header h4 {
@@ -414,14 +510,15 @@ button:active,
   padding: 0;
   margin: 0;
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .history-item {
   background: rgba(255, 255, 255, 0.04);
-  border-radius: 8px;
-  padding: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .history-item strong {
@@ -438,7 +535,7 @@ button:active,
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  margin-top: 6px;
+  margin-top: 10px;
 }
 
 .pill-soft {
@@ -458,6 +555,35 @@ button:active,
   color: #ffb3bd;
 }
 
+.quest-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.quest-column {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.quest-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px;
+  display: grid;
+  gap: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.quest-card strong {
+  font-size: 15px;
+}
+
 .stat-line {
   display: flex;
   align-items: center;
@@ -467,6 +593,85 @@ button:active,
 
 .stat-line strong {
   font-size: 18px;
+}
+
+.ledger-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  counter-reset: steps;
+}
+
+.timeline li {
+  position: relative;
+  padding: 12px 12px 12px 38px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.timeline li::before {
+  counter-increment: steps;
+  content: counter(steps);
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #0c1224;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+}
+
+.timeline strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.timeline .meta-text {
+  color: var(--muted);
+}
+
+.loot-list,
+.rumor-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.loot-list li,
+.rumor-list li {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.rumor-panel {
+  margin-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 12px;
+}
+
+.discoveries-card .label {
+  letter-spacing: 0.1em;
 }
 
 .manual-viewer {
@@ -541,6 +746,18 @@ button:active,
 
   .page-header {
     flex-direction: column;
+  }
+
+  .hero-panel {
+    width: 100%;
+  }
+
+  .highlight-row {
+    grid-template-columns: 1fr;
+  }
+
+  .ledger-layout {
+    grid-template-columns: 1fr;
   }
 
   .identity {

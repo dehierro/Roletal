@@ -234,6 +234,51 @@ const historyData = {
   ]
 };
 
+const historyShowcase = {
+  arcTitle: "Mistlocked Port Intrigue",
+  sessionTitle: "Session XII: Moonlit Bargains",
+  location: "Lithmoor Docks",
+  vibe: "Fog-laced intrigue",
+  momentum: "Allies rallied, Court unsettled",
+  reward: "1,250 XP & stormglass compass",
+  timeline: [
+    {
+      title: "Harbor watch calls ceasefire",
+      detail: "Aris negotiates a truce so the marshal will help repel the wraith tide.",
+      phase: "First watch",
+      stamp: "Dawn fog",
+    },
+    {
+      title: "Shadow courier intercepted",
+      detail: "Sable lifts the Mask of Whispers from a Shaded Court envoy mid-market.",
+      phase: "Second watch",
+      stamp: "Sunbreak",
+    },
+    {
+      title: "Forge-heart rekindled",
+      detail: "Branik channels runes to restart an ember core beneath the docks.",
+      phase: "Third watch",
+      stamp: "High tide",
+    },
+    {
+      title: "Tide-lock keys mapped",
+      detail: "The party traces the smuggler routes and marks three hidden vaults.",
+      phase: "Final watch",
+      stamp: "Moonrise",
+    }
+  ],
+  loot: [
+    { title: "Stormglass Compass", detail: "Points toward planar rifts and contraband vaults." },
+    { title: "Golem Armlet Blueprint", detail: "Upgrade allows Branik's construct to glide over water." },
+    { title: "Veil-Touched Signet", detail: "Once per rest, cast *pass without trace* for the crew." }
+  ],
+  rumors: [
+    "Smugglers hired a skyship to lift the tide-lock keys by dawn.",
+    "Marshal Vayne is considering alliance terms if the caravan arrives intact.",
+    "The Shaded Court placed a bounty on the party's forged papers.",
+  ]
+};
+
 const STORAGE_KEY = "activeProfileKey";
 
 const vitalsContainer = document.getElementById("vitals");
@@ -244,8 +289,14 @@ const spellsContainer = document.getElementById("spells");
 const worldNotes = document.getElementById("world-notes");
 const characterNotes = document.getElementById("character-notes");
 const eventNotes = document.getElementById("event-notes");
-const questNotes = document.getElementById("quest-notes");
 const historySection = document.getElementById("history");
+const highlightContainer = document.getElementById("history-highlights");
+const questOngoingContainer = document.getElementById("quest-ongoing");
+const questCriticalContainer = document.getElementById("quest-critical");
+const questResolvedContainer = document.getElementById("quest-resolved");
+const timelineList = document.getElementById("session-timeline");
+const lootList = document.getElementById("loot-list");
+const rumorList = document.getElementById("rumor-list");
 
 const nameEl = document.getElementById("char-name");
 const classEl = document.getElementById("char-class");
@@ -340,6 +391,108 @@ function renderHistoryList(container, entries) {
   });
 }
 
+function renderHighlights(showcase) {
+  if (!highlightContainer) return;
+  const highlights = [
+    { label: "Arc", value: showcase.arcTitle },
+    { label: "Session", value: showcase.sessionTitle },
+    { label: "Current Location", value: showcase.location },
+    { label: "Table Mood", value: showcase.vibe },
+    { label: "Momentum", value: showcase.momentum },
+    { label: "XP & Spoils", value: showcase.reward }
+  ];
+
+  highlightContainer.innerHTML = "";
+
+  for (let i = 0; i < highlights.length; i += 2) {
+    const row = document.createElement("div");
+    row.className = "highlight-row";
+
+    highlights.slice(i, i + 2).forEach((item) => {
+      const card = document.createElement("div");
+      card.className = "highlight-card";
+      card.innerHTML = `<span class="label">${item.label}</span><strong>${item.value}</strong>`;
+      row.appendChild(card);
+    });
+
+    highlightContainer.appendChild(row);
+  }
+}
+
+function renderQuestBoard(quests) {
+  const columns = {
+    ongoing: questOngoingContainer,
+    critical: questCriticalContainer,
+    resolved: questResolvedContainer
+  };
+
+  Object.values(columns).forEach((column) => {
+    if (column) column.innerHTML = "";
+  });
+
+  quests.forEach((entry) => {
+    const targetKey = statusClass(entry.status).includes("strong")
+      ? "critical"
+      : entry.status.toLowerCase() === "resolved"
+      ? "resolved"
+      : "ongoing";
+    const target = columns[targetKey];
+    if (!target) return;
+
+    const card = document.createElement("div");
+    card.className = "quest-card";
+    card.innerHTML = `
+      <strong>${entry.title}</strong>
+      <p class="meta-text">${entry.detail}</p>
+      <div class="history-meta">
+        <span class="pill ${statusClass(entry.status)}">${entry.status}</span>
+        <span class="meta-text">${entry.note || ""}</span>
+      </div>
+    `;
+    target.appendChild(card);
+  });
+}
+
+function renderTimeline(entries) {
+  if (!timelineList) return;
+  timelineList.innerHTML = "";
+
+  entries.forEach((step) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <strong>${step.title}</strong>
+      <p class="meta-text">${step.detail}</p>
+      <div class="history-meta">
+        <span class="pill pill-soft">${step.phase}</span>
+        <span class="meta-text">${step.stamp}</span>
+      </div>
+    `;
+    timelineList.appendChild(li);
+  });
+}
+
+function renderLoot(loot) {
+  if (!lootList) return;
+  lootList.innerHTML = "";
+
+  loot.forEach((item) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${item.title}</strong><p class="meta-text">${item.detail}</p>`;
+    lootList.appendChild(li);
+  });
+}
+
+function renderRumors(rumors) {
+  if (!rumorList) return;
+  rumorList.innerHTML = "";
+
+  rumors.forEach((rumor) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<p class="meta-text">${rumor}</p>`;
+    rumorList.appendChild(li);
+  });
+}
+
 function statusClass(status) {
   const normalized = status.toLowerCase();
   if (normalized === "critical") return "pill-strong";
@@ -393,7 +546,11 @@ function renderHistory() {
   renderHistoryList(worldNotes, historyData.world);
   renderHistoryList(characterNotes, historyData.characters);
   renderHistoryList(eventNotes, historyData.events);
-  renderHistoryList(questNotes, historyData.quests);
+  renderHighlights(historyShowcase);
+  renderQuestBoard(historyData.quests);
+  renderTimeline(historyShowcase.timeline);
+  renderLoot(historyShowcase.loot);
+  renderRumors(historyShowcase.rumors);
 }
 
 function rollDice(count, sides) {
@@ -623,17 +780,13 @@ function handleManualPage() {
 function handleHistoryPage() {
   if (!historySection) return;
 
-  const storedProfile = loadStoredProfile();
-  if (!storedProfile) {
-    redirectToLogin();
-    return;
-  }
+  const storedProfile = loadStoredProfile() || { characterIndex: 0, title: "Demo", key: "demo" };
 
   const character = characters[storedProfile.characterIndex];
   renderHistory();
 
   if (navSubtitle && character) navSubtitle.textContent = `History for ${character.name}`;
-  if (statusPill) statusPill.textContent = "Ready";
+  if (statusPill) statusPill.textContent = storedProfile.key === "demo" ? "Demo" : "Ready";
   if (historyHeader) historyHeader.classList.remove("hidden");
   if (signOutButton) signOutButton.disabled = false;
 

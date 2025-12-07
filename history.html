@@ -6,7 +6,7 @@
   <title>Campaign History</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="history-page">
   <nav class="top-nav">
     <div class="nav-left">
       <span class="nav-brand">Campaign Console</span>
@@ -23,22 +23,31 @@
     </div>
   </nav>
 
-  <header class="page-header" id="history-header">
-    <div>
+  <header class="page-header page-hero" id="history-header">
+    <div class="hero-copy">
       <p class="eyebrow">Campaign Companion</p>
-      <h1>Campaign Chronicle</h1>
-      <p class="tagline">Reference the world, dramatis personae, pivotal events, and open quests.</p>
+      <h1>Chronicle Ledger</h1>
+      <p class="tagline">A modern recap with parchment trims, perfect for an RPG session at the table.</p>
+      <div class="hero-badges">
+        <span class="pill pill-strong">Story Mode</span>
+        <span class="pill pill-soft">Live Notes</span>
+        <span class="pill pill-muted">Mock Data Loaded</span>
+      </div>
     </div>
-    <div class="meta">
-      <span class="pill" id="status-pill">Locked</span>
+    <div class="hero-panel">
+      <div class="hero-panel-header">
+        <p class="label">Current Arc</p>
+        <span class="glyph">✶</span>
+      </div>
+      <div class="hero-panel-body" id="history-highlights"></div>
     </div>
   </header>
 
   <section class="history" id="history">
     <header class="history-header">
       <div>
-        <p class="label">History</p>
-        <h3>Session context</h3>
+        <p class="label">Session context</p>
+        <h3>The story so far</h3>
         <p class="meta-text">Locations, allies, foes, twists, and quests in one view.</p>
       </div>
       <div class="history-legend" aria-label="Legend for quest status">
@@ -51,15 +60,15 @@
     <div class="history-grid">
       <article class="history-card" id="history-world">
         <div class="history-card-header">
-          <p class="label">World</p>
-          <h4>Key locations &amp; factions</h4>
+          <p class="label">World &amp; Factions</p>
+          <h4>Places &amp; powers in play</h4>
         </div>
         <ul class="history-list" id="world-notes"></ul>
       </article>
 
       <article class="history-card" id="history-characters">
         <div class="history-card-header">
-          <p class="label">Characters</p>
+          <p class="label">Dramatis Personae</p>
           <h4>Allies and rivals</h4>
         </div>
         <ul class="history-list" id="character-notes"></ul>
@@ -67,18 +76,53 @@
 
       <article class="history-card" id="history-events">
         <div class="history-card-header">
-          <p class="label">Events</p>
-          <h4>Recent turning points</h4>
+          <p class="label">Turning Points</p>
+          <h4>Session highlights</h4>
         </div>
         <ul class="history-list" id="event-notes"></ul>
       </article>
 
       <article class="history-card" id="history-quests">
         <div class="history-card-header">
-          <p class="label">Quests</p>
+          <p class="label">Quest Board</p>
           <h4>Active and resolved threads</h4>
         </div>
-        <ul class="history-list" id="quest-notes"></ul>
+        <div class="quest-columns">
+          <div class="quest-column">
+            <p class="label">Ongoing</p>
+            <div class="quest-list" id="quest-ongoing"></div>
+          </div>
+          <div class="quest-column">
+            <p class="label">Critical</p>
+            <div class="quest-list" id="quest-critical"></div>
+          </div>
+          <div class="quest-column">
+            <p class="label">Resolved</p>
+            <div class="quest-list" id="quest-resolved"></div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="ledger-layout">
+      <article class="history-card timeline-card">
+        <div class="history-card-header">
+          <p class="label">Session Ledger</p>
+          <h4>Nightly timeline</h4>
+        </div>
+        <ol class="timeline" id="session-timeline"></ol>
+      </article>
+
+      <article class="history-card discoveries-card">
+        <div class="history-card-header">
+          <p class="label">Finds &amp; Favors</p>
+          <h4>New loot and boons</h4>
+        </div>
+        <ul class="loot-list" id="loot-list"></ul>
+        <div class="rumor-panel">
+          <p class="label">Rumors on the wind</p>
+          <ul class="rumor-list" id="rumor-list"></ul>
+        </div>
       </article>
     </div>
   </section>
