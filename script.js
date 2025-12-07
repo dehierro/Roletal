@@ -163,6 +163,77 @@ const manualLibrary = {
   }
 };
 
+const historyData = {
+  world: [
+    {
+      title: "Lithmoor Docks",
+      detail: "Trade hub recovering after the mist storms; smugglers still hold the tide-lock keys.",
+      note: "Fog lifts at dawn, revealing new wrecks weekly."
+    },
+    {
+      title: "Emberhold Range",
+      detail: "Dwarven fortresses linked by magma tunnels; Branik's kin guard the forge-hearts.",
+      note: "Obsidian vents flare during eclipses."
+    },
+    {
+      title: "Shaded Court",
+      detail: "Shadow cabal Sable once served; contracts sealed with whispered true names.",
+      note: "Rumor says the Court lost a binder's mask to the party."
+    }
+  ],
+  characters: [
+    {
+      title: "Marshal Sereth Vayne",
+      detail: "Hunts rogue mages; respects Aris after the bridge truce.",
+      status: "Ongoing"
+    },
+    {
+      title: "Tessa Korrin",
+      detail: "Quartermaster in Lithmoor who trades maps for favors; owes Branik a debt.",
+      status: "Ally"
+    },
+    {
+      title: "Archivist Meline",
+      detail: "Keeps cursed tomes under the Cathedral; negotiated passage for Sable once.",
+      status: "Neutral"
+    }
+  ],
+  events: [
+    {
+      title: "Bridge of Echoes Truce",
+      detail: "Ceasefire brokered between scouts and marshal's troops to repel a wraith tide.",
+      when: "Last session"
+    },
+    {
+      title: "Mask of Whispers Stolen",
+      detail: "The Shaded Court's relic taken from their courier; heat on the party rises.",
+      when: "Two weeks ago"
+    },
+    {
+      title: "Forge-heart Rekindled",
+      detail: "Branik reignited an ember core, earning Emberhold's crest of favor.",
+      when: "Month's end"
+    }
+  ],
+  quests: [
+    {
+      title: "Locate the Tide-lock Keys",
+      detail: "Recover keys before smugglers reopen the contraband channels.",
+      status: "Ongoing"
+    },
+    {
+      title: "Shadow Accord",
+      detail: "Offer terms to the Shaded Court or face their bounty hunters.",
+      status: "Critical"
+    },
+    {
+      title: "Escort the Ember Caravan",
+      detail: "Guard the caravan to the capital; safe delivery forgives Aris' harbor fines.",
+      status: "Resolved"
+    }
+  ]
+};
+
 const STORAGE_KEY = "activeProfileKey";
 
 const vitalsContainer = document.getElementById("vitals");
@@ -170,6 +241,11 @@ const attributesContainer = document.getElementById("attributes");
 const skillsContainer = document.getElementById("skills");
 const gearContainer = document.getElementById("gear");
 const spellsContainer = document.getElementById("spells");
+const worldNotes = document.getElementById("world-notes");
+const characterNotes = document.getElementById("character-notes");
+const eventNotes = document.getElementById("event-notes");
+const questNotes = document.getElementById("quest-notes");
+const historySection = document.getElementById("history");
 
 const nameEl = document.getElementById("char-name");
 const classEl = document.getElementById("char-class");
@@ -235,6 +311,34 @@ function renderSpell(spell) {
   return div;
 }
 
+function renderHistoryList(container, entries) {
+  if (!container) return;
+  container.innerHTML = "";
+
+  entries.forEach((entry) => {
+    const li = document.createElement("li");
+    li.className = "history-item";
+    const statusBadge = entry.status ? `<span class="pill ${statusClass(entry.status)}">${entry.status}</span>` : "";
+    const whenText = entry.when ? `<span class="meta-text">${entry.when}</span>` : "";
+    const noteText = entry.note ? `<p class="meta-text">${entry.note}</p>` : "";
+    const metaRow = whenText || statusBadge ? `<div class="history-meta">${whenText}${statusBadge}</div>` : "";
+    li.innerHTML = `
+      <strong>${entry.title}</strong>
+      <p class="meta-text">${entry.detail}</p>
+      ${noteText}
+      ${metaRow}
+    `;
+    container.appendChild(li);
+  });
+}
+
+function statusClass(status) {
+  const normalized = status.toLowerCase();
+  if (normalized === "critical") return "pill-strong";
+  if (normalized === "resolved") return "pill-muted";
+  return "pill-soft";
+}
+
 function clearContainers() {
   if (vitalsContainer) vitalsContainer.innerHTML = "";
   if (attributesContainer) attributesContainer.innerHTML = "";
@@ -274,6 +378,14 @@ function renderCharacter(character) {
   character.spells.forEach((spell) => {
     spellsContainer?.appendChild(renderSpell(spell));
   });
+}
+
+function renderHistory() {
+  if (!historySection) return;
+  renderHistoryList(worldNotes, historyData.world);
+  renderHistoryList(characterNotes, historyData.characters);
+  renderHistoryList(eventNotes, historyData.events);
+  renderHistoryList(questNotes, historyData.quests);
 }
 
 function authenticate(username, password) {
@@ -480,6 +592,7 @@ function handleSheetPage() {
 
   const character = characters[storedProfile.characterIndex];
   renderCharacter(character);
+  renderHistory();
   setAuthenticatedState(storedProfile, character);
 
   signOutButton?.addEventListener("click", () => {
