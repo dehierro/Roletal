@@ -98,6 +98,55 @@
       </header>
       <div class="grid grid-2" id="spells"></div>
     </section>
+
+    <section class="history" id="history">
+      <header class="history-header">
+        <div>
+          <p class="label">History</p>
+          <h3>Campaign Chronicle</h3>
+          <p class="meta-text">Reference the world, dramatis personae, pivotal events, and open quests.</p>
+        </div>
+        <div class="history-legend" aria-label="Legend for quest status">
+          <span class="pill pill-soft">Ongoing</span>
+          <span class="pill pill-muted">Resolved</span>
+          <span class="pill pill-strong">Critical</span>
+        </div>
+      </header>
+
+      <div class="history-grid">
+        <article class="history-card" id="history-world">
+          <div class="history-card-header">
+            <p class="label">World</p>
+            <h4>Key locations &amp; factions</h4>
+          </div>
+          <ul class="history-list" id="world-notes"></ul>
+        </article>
+
+        <article class="history-card" id="history-characters">
+          <div class="history-card-header">
+            <p class="label">Characters</p>
+            <h4>Allies and rivals</h4>
+          </div>
+          <ul class="history-list" id="character-notes"></ul>
+        </article>
+
+        <article class="history-card" id="history-events">
+          <div class="history-card-header">
+            <p class="label">Events</p>
+            <h4>Recent turning points</h4>
+          </div>
+          <ul class="history-list" id="event-notes"></ul>
+        </article>
+
+        <article class="history-card" id="history-quests">
+          <div class="history-card-header">
+            <p class="label">Quests</p>
+            <h4>Active and resolved threads</h4>
+          </div>
+          <ul class="history-list" id="quest-notes"></ul>
+        </article>
+      </div>
+    </section>
   </main>
 
   <footer class="page-footer">
